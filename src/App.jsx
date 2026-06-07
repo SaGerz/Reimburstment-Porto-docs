@@ -1,4 +1,5 @@
 import "./App.css";
+import { useState, useEffect, useCallback } from "react";
 
 import login from "./assets/Login.png";
 
@@ -25,7 +26,7 @@ const CheckIcon = () => (
 const techStack = [
   { abbr: "RJS", name: "React.js" },
   { abbr: "NET", name: "ASP.NET Core" },
-  { abbr: "SQL", name: "My SQL" },
+  { abbr: "SQL", name: "SQL Server" },
   { abbr: "JWT", name: "JWT Auth" },
   { abbr: "API", name: "REST API" },
   { abbr: "BSP", name: "Bootstrap" },
@@ -43,7 +44,7 @@ const responsibilities = [
   "Mengembangkan Frontend menggunakan React.js",
   "Mengembangkan Backend menggunakan ASP.NET Core",
   "Membuat REST API",
-  "Merancang Database My SQL",
+  "Merancang Database SQL Server",
   "Mengimplementasikan JWT Authentication",
   "Mengembangkan Workflow Approval Reimbursement",
   "Mengembangkan Modul Pembayaran Finance",
@@ -84,9 +85,38 @@ const modules = [
   },
 ];
 
+function Lightbox({ image, title, onClose }) {
+  useEffect(() => {
+    const onKey = (e) => { if (e.key === "Escape") onClose(); };
+    document.addEventListener("keydown", onKey);
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = "";
+    };
+  }, [onClose]);
+
+  return (
+    <div className="lightbox-backdrop" onClick={onClose}>
+      <div className="lightbox-close" onClick={onClose} aria-label="Tutup">✕</div>
+      <div className="lightbox-content" onClick={(e) => e.stopPropagation()}>
+        <img src={image} alt={title} />
+        <div className="lightbox-title">{title}</div>
+      </div>
+    </div>
+  );
+}
+
 function App() {
+  const [lightbox, setLightbox] = useState(null);
+  const openLightbox = useCallback((image, title) => setLightbox({ image, title }), []);
+  const closeLightbox = useCallback(() => setLightbox(null), []);
+
   return (
     <div>
+      {lightbox && (
+        <Lightbox image={lightbox.image} title={lightbox.title} onClose={closeLightbox} />
+      )}
       {/* NAV PILL */}
       <div className="nav-dot">
         <span className="dot" />
@@ -191,11 +221,12 @@ function App() {
           </div>
 
           <div className="login-wrapper">
-            <div className="login-frame">
+            <div className="login-frame" onClick={() => openLightbox(login, "Login Sistem")}>
               <img src={login} alt="Login Sistem" />
               <div className="frame-label">
                 <div className="frame-label-dot" />
                 <span>Login Sistem</span>
+                <span className="frame-zoom-hint">🔍 Klik untuk zoom</span>
               </div>
             </div>
           </div>
@@ -219,9 +250,17 @@ function App() {
 
             <div className="screenshots">
               {mod.screens.map((item) => (
-                <div className="screenshot-card" key={item.title}>
+                <div
+                  className="screenshot-card"
+                  key={item.title}
+                  onClick={() => openLightbox(item.image, item.title)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => e.key === "Enter" && openLightbox(item.image, item.title)}
+                >
                   <div className="img-wrapper">
                     <img src={item.image} alt={item.title} />
+                    <div className="img-zoom-icon">🔍</div>
                   </div>
                   <h3>{item.title}</h3>
                 </div>
@@ -272,7 +311,7 @@ function App() {
       {/* FOOTER */}
       <footer className="footer">
         <div className="container">
-          <p>Sistem Manajemen Reimbursement — React.js + ASP.NET Core + My SQL</p>
+          <p>Sistem Manajemen Reimbursement — React.js + ASP.NET Core + SQL Server</p>
         </div>
       </footer>
     </div>

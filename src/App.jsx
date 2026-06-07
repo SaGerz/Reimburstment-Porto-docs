@@ -26,7 +26,7 @@ const CheckIcon = () => (
 const techStack = [
   { abbr: "RJS", name: "React.js" },
   { abbr: "NET", name: "ASP.NET Core" },
-  { abbr: "SQL", name: "SQL Server" },
+  { abbr: "SQL", name: "MySQL" },
   { abbr: "JWT", name: "JWT Auth" },
   { abbr: "API", name: "REST API" },
   { abbr: "BSP", name: "Bootstrap" },
@@ -44,7 +44,7 @@ const responsibilities = [
   "Mengembangkan Frontend menggunakan React.js",
   "Mengembangkan Backend menggunakan ASP.NET Core",
   "Membuat REST API",
-  "Merancang Database SQL Server",
+  "Merancang Database MySQL",
   "Mengimplementasikan JWT Authentication",
   "Mengembangkan Workflow Approval Reimbursement",
   "Mengembangkan Modul Pembayaran Finance",
@@ -311,7 +311,7 @@ function App() {
       {/* FOOTER */}
       <footer className="footer">
         <div className="container">
-          <p>Sistem Manajemen Reimbursement — React.js + ASP.NET Core + SQL Server</p>
+          <p>Sistem Manajemen Reimbursement — React.js + ASP.NET Core + MySQL</p>
         </div>
       </footer>
     </div>
